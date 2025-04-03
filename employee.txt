@@ -1,0 +1,2 @@
+id: 1, name: John, salary: 300, position: web developer
+id: 2, name: Sara, salary: 150, position: web developer
