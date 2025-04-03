@@ -13,9 +13,9 @@ struct employee {
 int showMenu();
 void viewEmployees();
 
-
 int main() {
-
+    cout << "Welcome to the Employee System!" << endl << endl;
+    viewEmployees();
     return 0;
 }
 
@@ -38,6 +38,7 @@ int showMenu() {
 }
 
 void viewEmployees() {
+     cout << "Trying to open the file..." << endl;
     // Open the file
     ifstream file("employee.txt");
 
@@ -53,6 +54,5 @@ void viewEmployees() {
         cout << line << endl;
     }
 
-    // Close the file
     file.close();
 }
