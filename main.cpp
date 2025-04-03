@@ -11,6 +11,8 @@ struct employee {
 };
 
 int showMenu();
+void viewEmployees();
+
 
 int main() {
 
@@ -33,4 +35,24 @@ int showMenu() {
         cin >> choice;
     } while (choice < 1 || choice > 5);
     return choice;
+}
+
+void viewEmployees() {
+    // Open the file
+    ifstream file("employee.txt");
+
+    // Check if the file was opened successfully
+    if (!file) {
+        cout << "Error! Could not open file." << endl;
+        return;
+    }
+
+    string line;
+    // Read each line from the file and print it
+    while (getline(file, line)) {
+        cout << line << endl;
+    }
+
+    // Close the file
+    file.close();
 }
