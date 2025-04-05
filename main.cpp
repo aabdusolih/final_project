@@ -1,6 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <windows.h>
+
+void setColor(int color) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
 using namespace std;
 
 struct employee {
@@ -45,9 +51,12 @@ int main() {
             break;
         }
         case 5: {
-            cout << "Exitting program..." << endl;
-            break;
+                setColor(11); // Light cyan for exit color
+                cout << "\nExiting program..." << std::endl;
+                setColor(7); // Reset color
+                break;
         }
+
         default:
             cout << "Invalid choice." << endl;
     }
@@ -57,21 +66,41 @@ int main() {
 
 int showMenu() {
     int choice;
-    cout << "Choose an option from the menu. " << endl;
-    cout << "1. Search employees " << endl;
-    cout << "2. Update employee information " << endl;
-    cout << "3. Add a new employee " << endl;
-    cout << "4. Remove an employee " << endl;
-    cout << "5. Exit" << endl;
+
+    // Header
+    setColor(11); // Light cyan
+    cout << "=====================================" << std::endl;
+    cout << "       EMPLOYEE MANAGEMENT SYSTEM    " << std::endl;
+    cout << "=====================================" << std::endl;
+
+    // Menu options
+    setColor(14); // Yellow
+    cout << "  1. Search employees" << std::endl;
+    cout << "  2. Update employee information" << std::endl;
+    cout << "  3. Add a new employee" << std::endl;
+    cout << "  4. Remove an employee" << std::endl;
+    cout << "  5. Exit" << std::endl;
+
+    // Footer
+    setColor(11);
+    cout << "=====================================" << std::endl;
+
+    // User input loop
     do {
-        if (choice < 1 || choice > 5) {
-            cout << "Invalid choice." << endl;
-        }
+        setColor(10); // Green for input prompt
         cout << "Enter your choice: ";
         cin >> choice;
+
+        if (choice < 1 || choice > 5) {
+            setColor(12); // Red for error
+            cout << "Invalid choice. Please try again." << std::endl;
+        }
     } while (choice < 1 || choice > 5);
+
+    setColor(7); // Reset color
     return choice;
 }
+
 
 void viewEmployees() {
     cout << "Trying to open the file..." << endl;
