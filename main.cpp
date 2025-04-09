@@ -10,6 +10,7 @@ void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
+
 struct employee {
     int id;
     string name;
