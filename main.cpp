@@ -10,6 +10,9 @@ void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
+void delay(int seconds) {
+    Sleep(seconds * 1000); // Not used in the code yet
+}
 
 struct employee {
     int id;
@@ -33,7 +36,7 @@ int main() {
         int user_choice = showMenu();
         switch (user_choice) {
         case 1: {
-            setColor(10); // Green for response
+            setColor(13); // Green for response
             cout << "\nYou selected to search employees." << endl;
             cout << "Enter 1 to view all employees: " << endl;
             cout << "Enter 2 to search employees by id: " << endl;
@@ -56,7 +59,7 @@ int main() {
             break;
         }
         case 2: {
-            setColor(10); // Green for response
+            setColor(13); // Green for response
             cout << "\nYou selected to update employee information." << endl;
             string update_id = "";
             cout << "Enter the id of the employee to update: ";
@@ -65,13 +68,13 @@ int main() {
             break;
         }
         case 3: {
-            setColor(10); // Green for response
+            setColor(13); // Green for response
             cout << "\nYou selected to add a new employee." << endl;
             addEmployee();
             break;
         }
         case 4: {
-            setColor(10); // Green for response
+            setColor(13); // Green for response
             cout << "\nYou selected to remove an employee." << endl;
             string delete_id = "";
             cout << "Enter the id of the employee to delete: ";
@@ -130,7 +133,7 @@ int showMenu() {
 }
 
 void viewEmployees() {
-    setColor(10); // Green for response
+    setColor(13); // Green for response
     cout << "\nTrying to open the file..." << endl;
     ifstream file("employee.csv");
 
@@ -171,6 +174,8 @@ void addEmployee() {
     string name;
     int salary;
     string position;
+
+    setColor(13);
 
     cout << "Enter employee id: ";
     cin >> id;
@@ -323,6 +328,8 @@ void updateById(string update_id) {
             found = true;
             int new_salary;
             string new_name, new_position;
+
+            setColor(13);
 
             cout << "Enter new employee name: ";
             cin.ignore();  // Ignore leftover newline character in the input buffer
