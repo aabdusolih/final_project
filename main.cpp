@@ -4,6 +4,8 @@
 #include <windows.h>
 #include <sstream>
 
+// comments may be irrelevant and should be changed
+
 using namespace std;
 
 void setColor(int color) {
