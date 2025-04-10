@@ -1,3 +1,0 @@
-id: 1, name: "John", salary: 3000, position: "web developer"
-id: 2, name: "Sara", salary: 1500, position: "web developer"
-id: 3, name: "Ben", salary: 4000, position: "data analyst"
