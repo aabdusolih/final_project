@@ -4,10 +4,9 @@
 #include <windows.h>
 #include <sstream>
 
-// comments may be irrelevant and should be changed
-
 using namespace std;
 
+// function to change color
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
@@ -34,6 +33,7 @@ int main() {
     int search_choice = 0;
     cout << "Welcome to the Employee System!" << endl << endl;
 
+    // showing menu until user enters 5 for exit
     do {
         int user_choice = showMenu();
         switch (user_choice) {
@@ -101,6 +101,7 @@ int main() {
     } while (true);
 }
 
+// function to show menu
 int showMenu() {
     int choice;
 
@@ -151,12 +152,13 @@ void viewEmployees() {
     while (getline(file, line)) {
         if (isHeader) {
             isHeader = false;
-            continue; // skip CSV header
+            continue; // skip CSV header line
         }
 
         stringstream ss(line);
         string id, name, salary, position;
 
+        // parsing
         getline(ss, id, ',');
         getline(ss, name, ',');
         getline(ss, salary, ',');
@@ -179,6 +181,7 @@ void addEmployee() {
 
     setColor(13);
 
+    // getting new employee information
     cout << "Enter employee id: ";
     cin >> id;
     cin.ignore();
@@ -199,6 +202,7 @@ void addEmployee() {
         return;
     }
 
+    // writing new employee information
     file << id << "," << name << "," << salary << "," << position << endl;
     file.close();
 
@@ -230,7 +234,7 @@ void searchEmployee(string search_id)
         getline(ss, salary, ',');
         getline(ss, position, ',');
 
-        if (id == search_id)
+        if (id == search_id)  // print info if id matches
         {
             found = true;
             setColor(10); // Green for found result
@@ -251,7 +255,7 @@ void searchEmployee(string search_id)
 void deleteById(string delete_id)
 {
     ifstream file("employee.csv");
-    ofstream tempFile("temp.csv");
+    ofstream tempFile("temp.csv"); // creating temporary file to delete a record
     if (!file || !tempFile)
     {
         setColor(12); // Red for error
@@ -263,7 +267,7 @@ void deleteById(string delete_id)
     bool found = false;
 
     if (getline(file, line)) {
-        tempFile << line << endl;
+        tempFile << line << endl;  // header line
     }
 
     while (getline(file, line)) {
@@ -277,7 +281,7 @@ void deleteById(string delete_id)
 
         if (id == delete_id) {
             found = true;
-            continue;
+            continue; // skip writing when id found to delete a record
         }
 
         tempFile << id << "," << name << "," << salary << "," << position << endl;
@@ -285,7 +289,7 @@ void deleteById(string delete_id)
     file.close();
     tempFile.close();
 
-    if (found) {
+    if (found) { // rename temp to employee.csv to delete the employee
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
         setColor(10); // Green for success
@@ -316,7 +320,6 @@ void updateById(string update_id) {
         tempFile << line << endl;
     }
 
-    // Process the rest of the file
     while (getline(file, line)) {
         stringstream ss(line);
         string id, name, salary, position;
@@ -333,8 +336,10 @@ void updateById(string update_id) {
 
             setColor(13);
 
+            // getting information to update
+
             cout << "Enter new employee name: ";
-            cin.ignore();  // Ignore leftover newline character in the input buffer
+            cin.ignore();  // Ignore leftover newline character in the input
             getline(cin, new_name);
             cout << "Enter new employee salary: ";
             cin >> new_salary;
@@ -354,7 +359,7 @@ void updateById(string update_id) {
     file.close();
     tempFile.close();
 
-    if (found) {
+    if (found) { // change temp to employee.csv to update information
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
         setColor(10); // Green for success
