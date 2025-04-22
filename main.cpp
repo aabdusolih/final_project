@@ -3,9 +3,11 @@
 #include <string>
 #include <windows.h>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
+// function to change color
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
@@ -32,11 +34,12 @@ int main() {
     int search_choice = 0;
     cout << "Welcome to the Employee System!" << endl << endl;
 
+    // showing menu until user enters 5 for exit
     do {
         int user_choice = showMenu();
         switch (user_choice) {
         case 1: {
-            setColor(13); // Green for response
+            setColor(11); // Green for response
             cout << "\nYou selected to search employees." << endl;
             cout << "Enter 1 to view all employees: " << endl;
             cout << "Enter 2 to search employees by id: " << endl;
@@ -59,7 +62,7 @@ int main() {
             break;
         }
         case 2: {
-            setColor(13); // Green for response
+            setColor(11); // Green for response
             cout << "\nYou selected to update employee information." << endl;
             string update_id = "";
             cout << "Enter the id of the employee to update: ";
@@ -68,13 +71,13 @@ int main() {
             break;
         }
         case 3: {
-            setColor(13); // Green for response
+            setColor(11);
             cout << "\nYou selected to add a new employee." << endl;
             addEmployee();
             break;
         }
         case 4: {
-            setColor(13); // Green for response
+            setColor(11);
             cout << "\nYou selected to remove an employee." << endl;
             string delete_id = "";
             cout << "Enter the id of the employee to delete: ";
@@ -99,12 +102,14 @@ int main() {
     } while (true);
 }
 
+// function to show menu
 int showMenu() {
     int choice;
 
     setColor(11);
     cout << "=====================================" << endl;
     cout << "       EMPLOYEE MANAGEMENT SYSTEM    " << endl;
+    cout << "            Made by C--             "<< endl;
     cout << "=====================================" << endl;
 
     setColor(14);
@@ -133,7 +138,7 @@ int showMenu() {
 }
 
 void viewEmployees() {
-    setColor(13); // Green for response
+    setColor(11); // Green for response
     cout << "\nTrying to open the file..." << endl;
     ifstream file("employee.csv");
 
@@ -146,24 +151,33 @@ void viewEmployees() {
 
     string line;
     bool isHeader = true;
+    setColor(15);
+    cout << "ID      Name                Salary        Position " << endl;
+
     while (getline(file, line)) {
         if (isHeader) {
             isHeader = false;
-            continue; // skip CSV header
+            continue; // skip CSV header line
         }
 
         stringstream ss(line);
         string id, name, salary, position;
 
+        // parsing
         getline(ss, id, ',');
         getline(ss, name, ',');
         getline(ss, salary, ',');
         getline(ss, position, ',');
 
-        cout << "ID: " << id
-             << ", Name: " << name
-             << ", Salary: " << salary
-             << ", Position: " << position << endl;
+        int id_length = id.length();
+        int name_length = name.length();
+        int salary_length = salary.length();
+        int position_length = position.length();
+
+        cout << id << setw(8-id_length) << "  "
+             << name << setw(20-name_length) << "  "
+             << salary << setw(14-salary_length) << "  "
+             << position << endl;
     }
 
     file.close();
@@ -175,8 +189,9 @@ void addEmployee() {
     int salary;
     string position;
 
-    setColor(13);
+    setColor(11);
 
+    // getting new employee information
     cout << "Enter employee id: ";
     cin >> id;
     cin.ignore();
@@ -197,6 +212,7 @@ void addEmployee() {
         return;
     }
 
+    // writing new employee information
     file << id << "," << name << "," << salary << "," << position << endl;
     file.close();
 
@@ -228,7 +244,7 @@ void searchEmployee(string search_id)
         getline(ss, salary, ',');
         getline(ss, position, ',');
 
-        if (id == search_id)
+        if (id == search_id)  // print info if id matches
         {
             found = true;
             setColor(10); // Green for found result
@@ -249,7 +265,7 @@ void searchEmployee(string search_id)
 void deleteById(string delete_id)
 {
     ifstream file("employee.csv");
-    ofstream tempFile("temp.csv");
+    ofstream tempFile("temp.csv"); // creating temporary file to delete a record
     if (!file || !tempFile)
     {
         setColor(12); // Red for error
@@ -261,7 +277,7 @@ void deleteById(string delete_id)
     bool found = false;
 
     if (getline(file, line)) {
-        tempFile << line << endl;
+        tempFile << line << endl;  // header line
     }
 
     while (getline(file, line)) {
@@ -275,7 +291,7 @@ void deleteById(string delete_id)
 
         if (id == delete_id) {
             found = true;
-            continue;
+            continue; // skip writing when id found to delete a record
         }
 
         tempFile << id << "," << name << "," << salary << "," << position << endl;
@@ -283,7 +299,7 @@ void deleteById(string delete_id)
     file.close();
     tempFile.close();
 
-    if (found) {
+    if (found) { // rename temp to employee.csv to delete the employee
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
         setColor(10); // Green for success
@@ -314,7 +330,6 @@ void updateById(string update_id) {
         tempFile << line << endl;
     }
 
-    // Process the rest of the file
     while (getline(file, line)) {
         stringstream ss(line);
         string id, name, salary, position;
@@ -329,10 +344,12 @@ void updateById(string update_id) {
             int new_salary;
             string new_name, new_position;
 
-            setColor(13);
+            setColor(11);
+
+            // getting information to update
 
             cout << "Enter new employee name: ";
-            cin.ignore();  // Ignore leftover newline character in the input buffer
+            cin.ignore();  // Ignore leftover newline character in the input
             getline(cin, new_name);
             cout << "Enter new employee salary: ";
             cin >> new_salary;
@@ -352,7 +369,7 @@ void updateById(string update_id) {
     file.close();
     tempFile.close();
 
-    if (found) {
+    if (found) { // change temp to employee.csv to update information
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
         setColor(10); // Green for success
