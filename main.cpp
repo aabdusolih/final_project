@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 
+// comments may be irrelevant and should be changed
+
 using namespace std;
 
 // function to change color
