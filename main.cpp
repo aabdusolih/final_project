@@ -3,6 +3,9 @@
 #include <string>
 #include <windows.h>
 #include <sstream>
+#include <iomanip>
+
+// comments may be irrelevant and should be changed
 
 using namespace std;
 
@@ -38,7 +41,7 @@ int main() {
         int user_choice = showMenu();
         switch (user_choice) {
         case 1: {
-            setColor(13); // Green for response
+            setColor(11); // Green for response
             cout << "\nYou selected to search employees." << endl;
             cout << "Enter 1 to view all employees: " << endl;
             cout << "Enter 2 to search employees by id: " << endl;
@@ -61,7 +64,7 @@ int main() {
             break;
         }
         case 2: {
-            setColor(13); // Green for response
+            setColor(11); // Green for response
             cout << "\nYou selected to update employee information." << endl;
             string update_id = "";
             cout << "Enter the id of the employee to update: ";
@@ -70,13 +73,13 @@ int main() {
             break;
         }
         case 3: {
-            setColor(13); // Green for response
+            setColor(11);
             cout << "\nYou selected to add a new employee." << endl;
             addEmployee();
             break;
         }
         case 4: {
-            setColor(13); // Green for response
+            setColor(11);
             cout << "\nYou selected to remove an employee." << endl;
             string delete_id = "";
             cout << "Enter the id of the employee to delete: ";
@@ -108,6 +111,7 @@ int showMenu() {
     setColor(11);
     cout << "=====================================" << endl;
     cout << "       EMPLOYEE MANAGEMENT SYSTEM    " << endl;
+    cout << "            Made by C--             "<< endl;
     cout << "=====================================" << endl;
 
     setColor(14);
@@ -136,7 +140,7 @@ int showMenu() {
 }
 
 void viewEmployees() {
-    setColor(13); // Green for response
+    setColor(11); // Green for response
     cout << "\nTrying to open the file..." << endl;
     ifstream file("employee.csv");
 
@@ -149,6 +153,9 @@ void viewEmployees() {
 
     string line;
     bool isHeader = true;
+    setColor(15);
+    cout << "ID      Name                Salary        Position " << endl;
+
     while (getline(file, line)) {
         if (isHeader) {
             isHeader = false;
@@ -164,10 +171,15 @@ void viewEmployees() {
         getline(ss, salary, ',');
         getline(ss, position, ',');
 
-        cout << "ID: " << id
-             << ", Name: " << name
-             << ", Salary: " << salary
-             << ", Position: " << position << endl;
+        int id_length = id.length();
+        int name_length = name.length();
+        int salary_length = salary.length();
+        int position_length = position.length();
+
+        cout << id << setw(8-id_length) << "  "
+             << name << setw(20-name_length) << "  "
+             << salary << setw(14-salary_length) << "  "
+             << position << endl;
     }
 
     file.close();
@@ -179,7 +191,7 @@ void addEmployee() {
     int salary;
     string position;
 
-    setColor(13);
+    setColor(11);
 
     // getting new employee information
     cout << "Enter employee id: ";
@@ -334,7 +346,7 @@ void updateById(string update_id) {
             int new_salary;
             string new_name, new_position;
 
-            setColor(13);
+            setColor(11);
 
             // getting information to update
 
