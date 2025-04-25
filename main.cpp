@@ -5,25 +5,11 @@
 #include <sstream>
 #include <iomanip>
 
-// comments may be irrelevant and should be changed
-
 using namespace std;
 
-// function to change color
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-
-void delay(int seconds) {
-    Sleep(seconds * 1000); // Not used in the code yet
-}
-
-struct employee {
-    int id;
-    string name;
-    int salary;
-    string position;
-};
 
 int showMenu();
 void viewEmployees();
@@ -36,35 +22,41 @@ int main() {
     int search_choice = 0;
     cout << "Welcome to the Employee System!" << endl << endl;
 
-    // showing menu until user enters 5 for exit
     do {
         int user_choice = showMenu();
         switch (user_choice) {
         case 1: {
-            setColor(11); // Green for response
-            cout << "\nYou selected to search employees." << endl;
-            cout << "Enter 1 to view all employees: " << endl;
-            cout << "Enter 2 to search employees by id: " << endl;
-            do {
-                cout << "Enter your choice: ";
-                cin >> search_choice;
+                setColor(11);
+                cout << "\nYou selected to search employees." << endl;
+                cout << "Enter 1 to view all employees: " << endl;
+                cout << "Enter 2 to search employees by id: " << endl;
+                do {
+                    cout << "Enter your choice: ";
+                    cin >> search_choice;
 
-                if (search_choice == 1) {
-                    viewEmployees();
-                    break;
-                }
-                if (search_choice == 2) {
-                    string search_id = "";
-                    cout << "Enter the id of the employee to search: ";
-                    cin >> search_id;
-                    searchEmployee(search_id);
-                    break;
-                }
-            } while (search_choice != 2 && search_choice != 1);
-            break;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                        cout << "Invalid input. Please enter a number (1 or 2)." << endl;
+                        continue;
+                    }
+
+                    if (search_choice == 1) {
+                        viewEmployees();
+                        break;
+                    }
+                    if (search_choice == 2) {
+                        string search_id = "";
+                        cout << "Enter the id of the employee to search: ";
+                        cin >> search_id;
+                        searchEmployee(search_id);
+                        break;
+                    }
+                } while (search_choice != 2 && search_choice != 1);
+                break;
         }
         case 2: {
-            setColor(11); // Green for response
+            setColor(11);
             cout << "\nYou selected to update employee information." << endl;
             string update_id = "";
             cout << "Enter the id of the employee to update: ";
@@ -88,23 +80,22 @@ int main() {
             break;
         }
         case 5: {
-            setColor(11); // Light cyan for exit color
+            setColor(11);
             cout << "\nExiting program..." << endl;
-            setColor(7); // Reset color
+            setColor(7);
             return 0;
         }
 
         default:
-            setColor(12); // Red for invalid choice
+            setColor(12);
             cout << "\nInvalid choice. Please try again." << endl;
         }
 
-        setColor(7); // Reset color after response
-        cout << endl << "--------------------------------------" << endl; // Add some space for better readability
+        setColor(7);
+        cout << endl << "--------------------------------------" << endl;
     } while (true);
 }
 
-// function to show menu
 int showMenu() {
     int choice;
 
@@ -125,27 +116,35 @@ int showMenu() {
     cout << "=====================================" << endl;
 
     do {
-        setColor(10); // Green for menu input
+        setColor(10);
         cout << "Enter your choice: ";
         cin >> choice;
 
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            setColor(12);
+            cout << "Invalid input. Please enter a number between 1 and 5." << endl;
+            continue;
+        }
+
         if (choice < 1 || choice > 5) {
-            setColor(12); // Red for invalid choice
+            setColor(12);
             cout << "Invalid choice. Please try again." << endl;
         }
     } while (choice < 1 || choice > 5);
 
-    setColor(7); // Reset color
+    setColor(7);
     return choice;
 }
 
 void viewEmployees() {
-    setColor(11); // Green for response
+    setColor(11);
     cout << "\nTrying to open the file..." << endl;
     ifstream file("employee.csv");
 
     if (!file) {
-        setColor(12); // Red for error
+        setColor(12);
         cout << "Error! Could not open file." << endl;
         return;
     }
@@ -159,13 +158,12 @@ void viewEmployees() {
     while (getline(file, line)) {
         if (isHeader) {
             isHeader = false;
-            continue; // skip CSV header line
+            continue;
         }
 
         stringstream ss(line);
         string id, name, salary, position;
 
-        // parsing
         getline(ss, id, ',');
         getline(ss, name, ',');
         getline(ss, salary, ',');
@@ -193,7 +191,6 @@ void addEmployee() {
 
     setColor(11);
 
-    // getting new employee information
     cout << "Enter employee id: ";
     cin >> id;
     cin.ignore();
@@ -209,16 +206,15 @@ void addEmployee() {
 
     ofstream file("employee.csv", ios::app);
     if (!file) {
-        setColor(12); // Red for error
+        setColor(12);
         cout << "Error! Could not open file." << endl;
         return;
     }
 
-    // writing new employee information
     file << id << "," << name << "," << salary << "," << position << endl;
     file.close();
 
-    setColor(10); // Green for success
+    setColor(10);
     cout << "Employee successfully added." << endl;
 }
 
@@ -228,7 +224,7 @@ void searchEmployee(string search_id)
     ifstream file("employee.csv");
 
     if (!file) {
-        setColor(12); // Red for error
+        setColor(12);
         cout << "Error! Could not open file." << endl;
         return;
     }
@@ -246,10 +242,10 @@ void searchEmployee(string search_id)
         getline(ss, salary, ',');
         getline(ss, position, ',');
 
-        if (id == search_id)  // print info if id matches
+        if (id == search_id)
         {
             found = true;
-            setColor(10); // Green for found result
+            setColor(10);
             cout << "ID: " << id
             << ", Name: " << name
             << ", Salary: " << salary
@@ -259,7 +255,7 @@ void searchEmployee(string search_id)
     }
     if (!found)
     {
-        setColor(12); // Red for not found
+        setColor(12);
         cout << "Employee with given id not found in the database." << endl;
     }
 }
@@ -267,10 +263,10 @@ void searchEmployee(string search_id)
 void deleteById(string delete_id)
 {
     ifstream file("employee.csv");
-    ofstream tempFile("temp.csv"); // creating temporary file to delete a record
+    ofstream tempFile("temp.csv");
     if (!file || !tempFile)
     {
-        setColor(12); // Red for error
+        setColor(12);
         cout << "Error! Could not open file." << endl;
         return;
     }
@@ -279,7 +275,7 @@ void deleteById(string delete_id)
     bool found = false;
 
     if (getline(file, line)) {
-        tempFile << line << endl;  // header line
+        tempFile << line << endl;
     }
 
     while (getline(file, line)) {
@@ -293,7 +289,7 @@ void deleteById(string delete_id)
 
         if (id == delete_id) {
             found = true;
-            continue; // skip writing when id found to delete a record
+            continue;
         }
 
         tempFile << id << "," << name << "," << salary << "," << position << endl;
@@ -301,15 +297,15 @@ void deleteById(string delete_id)
     file.close();
     tempFile.close();
 
-    if (found) { // rename temp to employee.csv to delete the employee
+    if (found) {
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
-        setColor(10); // Green for success
+        setColor(10);
         cout << "Employee successfully deleted from database." << endl;
     }
     else {
         remove("temp.csv");
-        setColor(12); // Red for not found
+        setColor(12);
         cout << "Employee with ID " << delete_id << " was not found." << endl;
     }
 }
@@ -319,7 +315,7 @@ void updateById(string update_id) {
     ofstream tempFile("temp.csv");
     if (!file || !tempFile)
     {
-        setColor(12); // Red for error
+        setColor(12);
         cout << "Error! Could not open file." << endl;
         return;
     }
@@ -327,7 +323,6 @@ void updateById(string update_id) {
     string line;
     bool found = false;
 
-    // Write the header first
     if (getline(file, line)) {
         tempFile << line << endl;
     }
@@ -348,22 +343,19 @@ void updateById(string update_id) {
 
             setColor(11);
 
-            // getting information to update
 
             cout << "Enter new employee name: ";
-            cin.ignore();  // Ignore leftover newline character in the input
+            cin.ignore();
             getline(cin, new_name);
             cout << "Enter new employee salary: ";
             cin >> new_salary;
             cout << "Enter new employee position: ";
-            cin.ignore();  // Ignore leftover newline character
+            cin.ignore();
             getline(cin, new_position);
 
-            // Write updated data to the temporary file
             tempFile << id << "," << new_name << "," << new_salary << "," << new_position << endl;
         }
         else {
-            // Copy the existing data to the temporary file
             tempFile << id << "," << name << "," << salary << "," << position << endl;
         }
     }
@@ -371,15 +363,15 @@ void updateById(string update_id) {
     file.close();
     tempFile.close();
 
-    if (found) { // change temp to employee.csv to update information
+    if (found) {
         remove("employee.csv");
         rename("temp.csv", "employee.csv");
-        setColor(10); // Green for success
+        setColor(10);
         cout << "Employee information updated." << endl;
     }
     else {
         remove("temp.csv");
-        setColor(12); // Red for not found
+        setColor(12);
         cout << "Employee with ID " << update_id << " was not found." << endl;
     }
 }
